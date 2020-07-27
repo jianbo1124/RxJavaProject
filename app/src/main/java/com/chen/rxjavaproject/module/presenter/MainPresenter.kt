@@ -5,7 +5,10 @@ import com.chen.rxjavaproject.base.BasePresenter
 import com.chen.rxjavaproject.module.contract.MainContract
 import com.chen.rxjavaproject.module.model.MainModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.functions.Action
+import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -46,4 +49,19 @@ class MainPresenter : BasePresenter<MainModel, MainContract.IMainView>(),
                 Log.e("loadLoginState", it.toString())
             }
     }
+
+    override fun startCountDown() {
+        getModule()?.startCountDown()
+            ?.map { aLong -> 3 - aLong }
+            ?.doOnSubscribe { addDisposable(it) }
+            ?.observeOn(AndroidSchedulers.mainThread()) //在主线程中更新ui
+            ?.subscribe(Consumer {
+                getView()?.updateText(it)
+            }, Consumer { Log.e("", it.message) }, Action {
+                Log.e("", "finish")
+                getView()?.countDownFinish()
+            })
+    }
+
+
 }

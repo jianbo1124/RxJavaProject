@@ -10,6 +10,7 @@ import com.chen.rxjavaproject.net.entity.mainpage.Result
 import com.chen.rxjavaproject.utils.QRCodeUtil
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableEmitter
+import java.util.concurrent.TimeUnit
 
 /**
  *    @Author : chenjianbo
@@ -38,5 +39,10 @@ class MainModel : MainContract.IMainModel {
 
     override fun loop(): Observable<BaseResponse<List<Result>>> {
         return RetrofitClient.getInstance().create(MainPageApi::class.java).getQRCodeValue()
+    }
+
+    override fun startCountDown(): Observable<Long> {
+        return    Observable.interval(0, 1, TimeUnit.SECONDS)
+            .take(4)
     }
 }
