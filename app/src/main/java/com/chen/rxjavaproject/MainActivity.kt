@@ -4,8 +4,10 @@ import android.graphics.Bitmap
 import com.chen.rxjavaproject.base.BaseMVPActivity
 import com.chen.rxjavaproject.module.contract.MainContract
 import com.chen.rxjavaproject.module.presenter.MainPresenter
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.view.longClicks
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseMVPActivity<MainContract.IMainView, MainPresenter>(),
     MainContract.IMainView {
@@ -20,6 +22,7 @@ class MainActivity : BaseMVPActivity<MainContract.IMainView, MainPresenter>(),
     }
 
     override fun initView() {
+        addDisposable(ivQRCode.clicks().throttleFirst(3, TimeUnit.SECONDS).subscribe { })
         addDisposable(ivQRCode.longClicks().subscribe {
             getP()?.loadQRCode()
         })

@@ -26,6 +26,6 @@ interface MainContract {
 
     interface IMainPresenter {
         fun loadQRCode()
-
+        fun loop()
     }
 }

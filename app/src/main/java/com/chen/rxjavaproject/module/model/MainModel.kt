@@ -20,7 +20,6 @@ class MainModel : MainContract.IMainModel {
     override fun loadQRCode(): Observable<Bitmap> {
         var qrCodeValueObservable =
             RetrofitClient.getInstance().create(MainPageApi::class.java).getQRCodeValue()
-
         return qrCodeValueObservable.concatMap {
             return@concatMap Observable.create { emitter: ObservableEmitter<Bitmap> ->
                 it?.result.let { result ->
@@ -28,7 +27,6 @@ class MainModel : MainContract.IMainModel {
                         override fun onSuccess(wrapper: Bitmap) {
                             emitter.onNext(wrapper)
                         }
-
                         override fun onError(e: Exception) {
                             emitter.onError(e)
                         }
